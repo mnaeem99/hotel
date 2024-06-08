@@ -1,0 +1,286 @@
+
+type myHotel {
+    id: ID
+    placeId: String
+    name: String!
+    address: String!
+    phone: String
+    country: Country
+    geolat: Float
+    geolong: Float
+    googleMapUrl: String
+    hotelPriceLevel: HotelPriceLevel
+    addPriceRange: Boolean
+    priceRangeVotes: [PriceRangeVote!] @auth(scope: "ADMIN")
+    photoList: [Image!]
+    usersLoyaltyPoints: Int
+    photo: Image
+    isOnWishlist: Boolean!
+    isOnFavorite: Boolean!
+    gifts: [Gift!]
+    favoriteHotelQuality: [HotelQuality!]
+    usersWhoAddedHotel: HotelUsers
+    city(language: String): City
+    locality(language: String): Locality
+    status: BusinessStatus
+    qualityRanking(cityId: ID): [RankingQuality]
+    cityRanking(cityId: ID): Int
+    localityRanking: Int
+    gainLossRank: Int
+}
+type RankingQuality{
+    name: String
+    id: ID
+    rank: Int
+}
+type Country {
+    name: String
+    code: String
+    picture: Image
+    flag: Image
+    id: ID
+    availableLanguages: [ CountryLanguage ]
+}
+type CountryLanguage{
+    languageCode: String
+    countryName: String
+}
+type City {
+    name: String
+    picture: Image
+    placeId: String
+    id: ID
+    countryId: ID
+}
+type LocalityHotel{
+    localityId: ID
+    localityName: String
+    localityImageUrl: String
+    noOfHotel: Int
+}
+type HotelSitemap{
+    hotelId: ID
+    hotelName: String
+    localityId: ID
+    cityName: String
+    countryName: String
+    lastModified: LocalDateTime
+}
+type UserSitemap{
+    id: ID
+    nickName: String
+}
+type LocalitySitemap{
+    localityId: ID
+    cityName: String
+    countryName: String
+    lastModified: LocalDateTime
+}
+type CitySitemap{
+    cityName: String
+    countryName: String
+    lastModified: LocalDateTime
+}
+type Locality{
+    name: String
+    picture: Image
+    placeId: String
+    id: ID
+    cityId: ID
+    latestHotelAddedAt: LocalDateTime
+}
+type HotelPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [myHotel!]
+}
+type NewsFeedsPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [NewsFeeds!]
+}
+type UserHotelPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [UserAddedHotel!]
+}
+type PlaceHotelPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [PlaceHotel!]
+}
+type CountryPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Country!]
+}
+type CityPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [City!]
+}
+type LocalityHotelPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [LocalityHotel!]
+}
+type CitySitemapPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [CitySitemap!]
+}
+type LocalitySitemapPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [LocalitySitemap!]
+}
+type HotelSitemapPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [HotelSitemap!]
+}
+type UserSitemapPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [UserSitemap!]
+}
+type LocalityPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Locality!]
+}
+type GlobalCityPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [GlobalCity!]
+}
+type GlobalCity {
+    name: String
+    picture: Image
+    country: Country
+    id: ID
+}
+type PriceRangeVote {
+    range: Int
+    user: User
+}
+
+type HotelQuality {
+    count: Int
+    endorsedUsers: [User!]
+    quality: Quality
+}
+
+type HotelUsers {
+    count: Int
+    users: [User!]
+}
+
+type HotelPriceLevel {
+    name: HotelPrice
+    id: ID!
+}
+
+
+input LocationFilter {
+    latitude: Float
+    longitude: Float
+    language: String
+}
+input QueryFilter{
+    userQuery: String
+    latitude: Float
+    longitude: Float
+    language: String
+    sessionToken: String
+}
+
+enum HotelPrice {
+    Inexpensive,
+    Moderate,
+    Expensive,
+    VeryExpensive
+}
+enum BusinessStatus{
+    OPERATIONAL,
+    CLOSED_TEMPORARILY,
+    CLOSED_PERMANENTLY
+}
+type AutoCompleteHotel{
+    description: String
+    name: String
+    address: String
+    placeId: String
+    photo: Image
+}
+type AutocompleteResponse{
+    autoCompleteHotels: [AutoCompleteHotel]
+    sessionToken: String
+}
+input UserHotelFilter {
+    userId: ID!
+    countryId: ID
+    searchKeyword: String
+    language: String
+}
+type PlaceHotel{
+    countryId: ID
+    noOfHotel: Int
+    countryName: String
+    countryImageUrl: String
+}
+type NewsFeeds{
+    postTime: LocalDateTime
+    user: User
+    placeName: String
+    countUser: Int
+    users: [User]
+    placeDesc: String
+    placeImage: Image
+    qualities: [Quality]
+    hotelId: ID
+}
+input FavoriteHotel{
+    hotelId: ID
+    placeId: String
+    hotelQuality: [ID]
+    #Optional Parameter: Set true for remove hotel from favorites.
+    removeHotel: Boolean
+    #Optional Parameter
+    priceRange: Int
+}
+input WishListHotel{
+    hotelId: ID
+    placeId: String
+    #Optional Parameter: Set true for remove hotel To WishList.
+    removeHotel: Boolean
+}
+input PriceRange{
+    userId: ID
+    hotelId: ID
+    placeId: String
+    range: Int
+}
+type UserAddedHotel{
+    id: ID
+    name: String
+    address: String
+    hotelPriceLevel: ID
+    photo: Image
+    isOnFavorite: Boolean
+    isOnWishList: Boolean
+    createdAt: LocalDateTime
+}
+
+type Region {
+    name: String
+    address: String
+    geolat: Float
+    geolong: Float
+    placeId: String
+}
+type Suggestion {
+    hotels: [myHotel]
+    message: String
+    nextSuggestionTime: LocalDateTime
+}

@@ -1,0 +1,408 @@
+
+type QualityType {
+    id: ID!
+    name: String
+}
+type Quality {
+    id: ID!
+    name: String
+    qualityType: QualityType
+    active: Boolean
+}
+input QualityInput{
+    name: String
+    qualityTypeId: ID
+    active: Boolean
+}
+input UpdateQuality{
+    name: String
+    qualityTypeId: ID
+    id: ID
+    active: Boolean
+}
+input UpdateQualityType{
+    name: String
+    id: ID
+}
+
+
+type Gift {
+    name: String
+    picture: Image
+    points: Int
+    otherInfo: String
+    hotel: myHotel
+    id: ID
+}
+type GiftPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Gift!]
+}
+input GiftInput{
+    name: String
+    picture: FileUpload
+    hotelId: ID
+    points: Int
+    otherInfo: String
+    language: String
+}
+input UpdateGift{
+    name: String
+    picture: FileUpload
+    id: ID
+    points: Int
+    otherInfo: String
+    language: String
+}
+
+type Promotion {
+    title: String
+    titleColor: String
+    subTitle: String
+    subTitleColor: String
+    buttonText: String
+    buttonColor: String
+    budget: Int
+    duration: Int
+    showLogo: Boolean
+    cover: Image
+    geolat: Float
+    geolong: Float
+    radius: Float
+    region: String
+    active: Boolean
+    hotel: myHotel
+    targetAudience: [TargetAudience]
+    createdAt: LocalDateTime
+    modifiedAt: LocalDateTime
+    id: ID
+}
+type PromotionPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Promotion!]
+}
+input PromotionInput{
+    title: String
+    titleColor: String
+    subTitle: String
+    subTitleColor: String
+    buttonText: String
+    buttonColor: String
+    budget: Int
+    duration: Int
+    showLogo: Boolean
+    cover: FileUpload
+    geolat: Float
+    geolong: Float
+    radius: Float
+    region: String
+    active: Boolean
+    hotelId: ID
+    targetAudienceId: [ID]
+    language: String
+}
+input UpdatePromotion{
+    title: String
+    titleColor: String
+    subTitle: String
+    subTitleColor: String
+    buttonText: String
+    buttonColor: String
+    budget: Int
+    duration: Int
+    showLogo: Boolean
+    cover: FileUpload
+    geolat: Float
+    geolong: Float
+    radius: Float
+    region: String
+    active: Boolean
+    id: ID
+    targetAudienceId: [ID]
+    language: String
+}
+
+type TargetAudience{
+    title: String
+    id: ID
+}
+
+input LoyaltyInput{
+    hotelId: ID
+    userId: ID
+    points: Int
+    language: String
+}
+input HotelInput{
+    name: String
+    address: String
+    geolat: Float
+    geolong: Float
+    photo: FileUpload
+    photoList: [FileUpload]
+    phone : String
+    language: String
+    countryId: ID
+    cityId: ID
+    localityId: ID
+    hotelPriceLevelId: ID
+    placeId: String
+    status: BusinessStatus
+}
+input UpdateHotel{
+    name: String
+    address: String
+    geolat: Float
+    geolong: Float
+    photo: FileUpload
+    photoList: [FileUpload]
+    removePhotoId: [ID]
+    phone : String
+    language: String
+    countryId: ID
+    cityId: ID
+    localityId: ID
+    hotelPriceLevelId: ID
+    placeId: String
+    status: BusinessStatus
+    id: ID
+}
+input HotelVerificationAppointmentInput{
+    hotelId: ID
+    phone: String
+    date: LocalDateTime
+    language: String
+}
+type HotelVerificationAppointment{
+    appointmentDate: LocalDateTime
+    hotel: myHotel
+    id: ID
+}
+type HotelVerificationAppointmentPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [HotelVerificationAppointment!]
+}
+type Internationalization{
+    detail_title:String
+    detail_main_para:String
+    detail_description_section1_part1:String
+    detail_description_section1_part2:String
+    detail_description_section2_part1:String
+    detail_description_section2_part2: String
+    detail_description_section3_part1:String
+    detail_description_section3_part2:String
+    featured_countries:String
+    popular_searches:String
+    neighbourhood:String
+    header_left_link: String
+    header_left_title_link: String
+    logo_title: String
+    sign_in: String
+    sign_up: String
+    home_title: String
+    home_title_city: String
+    home_title_last: String
+    home_paragraph_one: String
+    home_paragraph_two: String
+    our_goal_title: String
+    goal_card_one_title: String
+    goal_card_one_paragraph: String
+    goal_card_two_title: String
+    goal_card_two_paragraph: String
+    trending_hotels_title: String
+    tab_section_title: String
+    tab_section_title_btn_one: String
+    tab_section_title_btn_two: String
+    footer_title: String
+    footer_paragraph: String
+    footer_btn_one: String
+    footer_btn_two: String
+    footer_link_one_paragraph: String
+    footer_link_two_title: String
+    footer_link_two_para: String
+    footer_link_three_title: String
+    footer_link_three_para_one: String
+    footer_link_three_para_two: String
+    footer_link_three_para_three: String
+    footer_link_four_title: String
+    footer_link_four_para_one: String
+    footer_link_four_para_two: String
+    footer_copy_right: String
+    swipper_one_title: String
+    swipper_one_para: String
+    swipper_two_title: String
+    swipper_two_para: String
+    swipper_btn: String
+    followers_text: String
+    following_text: String
+    follow_btn: String
+    private_account_title: String
+    already_follow: String
+    see_favorites_wishlist: String
+    favorites_title: String
+    wishlist_title: String
+    user_not_added_title: String
+    yet_title: String
+    user_not_added_para_one: String
+    user_not_added_para_two: String
+    sort_hotel_date_asc: String
+    sort_hotel_date_desc: String
+    sort_hotel_price_desc: String
+    sort_hotel_price_asc: String
+    hotels_title: String
+    view_hotel_btn: String
+    added_place_title: String
+    map_title: String
+    map_btn: String
+    gifts_title: String
+    similar_hotels_title: String
+}
+type Chef {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    nickName: String!
+    bio: String
+    photo: Image
+    qualities: [Quality!]
+}
+type ChefPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Chef!]
+}
+type QualityPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Quality!]
+}
+type QualityTypePage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [QualityType!]
+}
+
+type UserProfileAdmin {
+    user: User
+    dateOfBirth: Date @auth(scope: "ADMIN")
+    userAuths: [UserAuthentication] @auth(scope: "ADMIN")
+}
+type UserAuthentication{
+    email: String
+    phone: String
+    type: UserAuthenticationType
+    email : String
+    phone : String
+    password : String
+    googleId : String
+    appleId : String
+    facebookId : String
+    verified: Boolean
+}
+
+input LocalityInput{
+    name: String
+    picture: FileUpload
+    language: String
+    placeId: String
+    cityId: ID
+}
+input UpdateLocality{
+    name: String
+    picture: FileUpload
+    id: ID
+    language: String
+    placeId: String
+    cityId: ID
+}
+input CityInput{
+    name: String
+    picture: FileUpload
+    language: String
+    placeId: String
+    countryId: ID
+}
+input UpdateCity{
+    name: String
+    picture: FileUpload
+    id: ID
+    language: String
+    placeId: String
+    countryId: ID
+}
+input CountryInput{
+    name: String
+    code: String
+    picture: FileUpload
+    flag: FileUpload
+    language: String
+}
+input UpdateCountry{
+    name: String
+    code: String
+    picture: FileUpload
+    flag: FileUpload
+    id: ID
+    language: String
+}
+input AdminHotelFilter {
+    language: String
+    countryId: ID
+    cityId: ID
+    localityId: ID
+    priceLevelId: ID
+    searchKeyword: String
+}
+input AdminUserFilter {
+    language: String
+    countryId: ID
+    userType: UserType
+    searchKeyword: String
+}
+input HotelPriceConfigInput{
+    priceLevelThreshold: Float
+    priceRangeUsers: Int
+}
+type HotelPriceConfig{
+    priceLevelThreshold: Float
+    priceRangeUsers: Int
+    id: ID
+}
+type CountryAddressConfig {
+    type: String
+    priority: Int
+    level: String
+    id: ID
+}
+input CountryAddressConfigInput{
+    countryId: ID
+    type: String
+    priority: Int
+    level: String
+}
+input UpdateCountryAddressConfig{
+    configId: ID
+    countryId: ID
+    type: String
+    priority: Int
+    level: String
+}
+type CityAddressConfig {
+    type: String
+    priority: Int
+    id: ID
+}
+input CityAddressConfigInput{
+    cityId: ID
+    type: String
+    priority: Int
+}
+input UpdateCityAddressConfig{
+    configId: ID
+    cityId: ID
+    type: String
+    priority: Int
+}

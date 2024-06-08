@@ -1,0 +1,55 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+		<!-- ChangeSet to load data into hotel_price table -->
+		<changeSet id="1" author="usman">
+			<loadData encoding="UTF-8" file="db/data/hotel_price.csv" separator="," tableName="hotel_price">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into hotel_price_config table -->
+		<changeSet id="2" author="usman">
+			<loadData encoding="UTF-8" file="db/data/hotel_price_config.csv" separator="," tableName="hotel_price_config">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into hotel_price table -->
+		<changeSet id="3" author="usman">
+			<loadData encoding="UTF-8" file="db/data/status.csv" separator="," tableName="status">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into admin table -->
+		<changeSet id="4" author="usman">
+			<loadData encoding="UTF-8" file="db/data/admin.csv" separator="," tableName="admin">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into language table -->
+		<changeSet id="5" author="usman">
+			<loadData encoding="UTF-8" file="db/data/language.csv" separator="," tableName="language">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into quality_type table -->
+		<changeSet id="6" author="usman">
+			<loadData encoding="UTF-8" file="db/data/quality_type.csv" separator="," tableName="quality_type">
+			</loadData>
+		</changeSet>
+
+		<!-- ChangeSet to load data into quality table -->
+		<changeSet id="7" author="usman">
+			<loadData encoding="UTF-8" file="db/data/quality.csv" separator="," tableName="quality">
+				<column name="id" header="id"/>
+				<column name="name" header="name"/>
+				<column name="active" header="active" defaultValue="false"/>
+				<column name="equivalent_quality" type="STRING" defaultValue="null"/>
+				<column name="quality_type_id" header="quality_type_id"/>
+			</loadData>
+		</changeSet>
+
+</databaseChangeLog>

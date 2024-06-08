@@ -1,0 +1,188 @@
+scalar Date
+
+type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    nickName: String!
+    bio: String
+    photo: Image
+    language: String
+    country: Country
+    isPrivate: Boolean!
+    isChef: Boolean!
+    userType: UserType @auth(scope: "ADMIN")
+    isBlocked: Boolean!
+    isFollowing: Boolean!
+    isFollower: Boolean!
+    isAdminBlocked: Boolean @auth(scope: "ADMIN")
+    followersCount: Int
+    followingCount: Int
+    followStatus: FollowStatus
+    status: Status
+}
+
+type UserProfile {
+    user: User
+    email: String
+    phoneNumber: String
+    dateOfBirth: Date
+}
+
+input UpdateProfile {
+    firstName: String
+    lastName: String
+    nickName: String
+    bio: String
+    dob: Date
+    language: String
+    countryCode: String
+    profilePicture: FileUpload
+}
+
+input Location {
+    latitude: Float
+    longitude: Float
+}
+input UserInput {
+    firstName: String
+    lastName: String
+    nickName: String
+    bio: String
+    dob: Date
+    language: String
+    countryId: ID
+    photo: FileUpload
+    userType: UserType
+    isPrivate: Boolean
+    isChef: Boolean
+    auths: [UserAuthInput]
+}
+input UpdateUser {
+    firstName: String
+    lastName: String
+    nickName: String
+    bio: String
+    dob: Date
+    language: String
+    countryId: ID
+    photo: FileUpload
+    userType: UserType
+    isPrivate: Boolean
+    isChef: Boolean
+    auths: [UserAuthInput]
+    userId: ID
+}
+input UserAuthInput {
+    type: UserAuthenticationType
+    email : String
+    phone : String
+    password : String
+    googleId : String
+    appleId : String
+    facebookId : String
+    verified : Boolean
+}
+
+enum UserAuthenticationType {
+    EMAIL,
+    PHONE,
+    GOOGLE,
+    APPLE,
+    FACEBOOK
+}
+enum UserType {
+    hotel_OWNER,hotel_STAFF,SIMPLE_USER
+}
+input UpdateNotificationSetting {
+    pauseAll: Boolean
+    newFollower: Boolean
+    friendStatus: Boolean
+    friendFavorite: Boolean
+    friendJoined: Boolean
+    friendAddingWishlist: Boolean
+    promotionFromHotel: Boolean
+    newsfeedAlert: Boolean
+}
+type NotificationSetting {
+    pauseAll: Boolean
+    newFollower: Boolean
+    friendStatus: Boolean
+    friendFavorite: Boolean
+    friendJoined: Boolean
+    friendAddingWishlist: Boolean
+    promotionFromHotel: Boolean
+    newsfeedAlert: Boolean
+}
+type PointsHistory{
+    hotel: myHotel
+    pointsSpent: Int
+}
+type LoyaltyPoints{
+    user: User
+    hotel: myHotel
+    loyaltyPoints: Int
+}
+type Notification{
+    title: NotificationType
+    text: String
+    status: NotificationStatus
+    user: User
+    hotel: myHotel
+    createdAt: LocalDateTime
+    id: ID
+}
+enum NotificationType{
+    NEW_FOLLOWER,
+    REQUEST_FOLLOWING,
+    FRIEND_FAVORITE,
+    FRIEND_STATUS,
+    MY_STATUS,
+    FRIEND_JOINED,
+    FRIEND_ADDING_WISHLIST
+}
+enum NotificationStatus{
+    READ,
+    UNREAD
+}
+type Status{
+    name: String
+    percentage: Int
+}
+type SpendingStatus{
+    spenderPercentage: Int
+    statuses: [Status]
+}
+type UserPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [User!]
+}
+type LoyaltyPointsPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [LoyaltyPoints!]
+}
+type PointsHistoryPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [PointsHistory!]
+}
+type NotificationPage implements Page{
+    totalElements: Int!
+    totalPages: Int!
+    content: [Notification!]
+}
+enum FollowStatus {
+FOLLOWING,REQUESTED,FOLLOW
+}
+input SearchUserFilter{
+    userId: ID
+    language: String
+    keyword: String
+}
+type Language{
+    code: String
+    imageUrl: String
+    name: String
+}

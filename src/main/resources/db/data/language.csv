@@ -1,0 +1,4 @@
+"code","image_url","name"
+"en","https://my-dev.s3.ap-southeast-1.amazonaws.com/flag-US","English"
+"fr","https://my-dev.s3.ap-southeast-1.amazonaws.com/flag-FR","French"
+"zh","https://my-dev.s3.ap-southeast-1.amazonaws.com/flag-CN","Chinese"

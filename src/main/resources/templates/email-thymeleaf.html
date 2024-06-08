@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>My</title>
+</head>
+<body>
+<p></p>
+<p th:text="'Hello, Your confirmation code is: ' + ${confirmationCode}"></p>
+<p>The confirmation code will be valid for 60 minutes. If you did not initiate this operation, you can ignore this email.<br><br> My Team<br> Automated message. Please do not reply.</p>
+</body>
+</html>

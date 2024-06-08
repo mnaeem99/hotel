@@ -1,0 +1,284 @@
+# This is a directive declaration
+directive @auth(scope : String!) on FIELD_DEFINITION
+scalar DateTime
+scalar LocalDateTime
+scalar Url
+scalar FileUpload
+scalar HashMap
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Image {
+    id: ID!
+    thumbnailUrl: Url
+    imageUrl: Url
+}
+interface Page {
+    totalElements: Int!
+    totalPages: Int!
+}
+
+input Sort {
+    orders: [Order!]
+}
+
+enum NullHandling {
+    NATIVE,
+    NULLS_FIRST,
+    NULLS_LAST
+}
+enum Direction {
+    ASC,
+    DESC
+}
+
+input Order {
+    property: String!
+    direction: Direction
+    ignoreCase: Boolean
+    nullHandling: NullHandling
+}
+
+input PageOptions {
+    page: Int!
+    size: Int!
+    sort: Sort
+}
+#This needs to correspond to one of the Kotlin Classes Query, Mutation, Subscription
+type Query {
+    profile(language: String) : UserProfile
+    user(id: ID!, language: String) : User
+    searchUserByNickname(nickName: String, language: String): User
+    followers(filter: SearchUserFilter, pageOptions: PageOptions): UserPage
+    following(filter: SearchUserFilter, pageOptions: PageOptions): UserPage
+    followRequest(language: String, pageOptions: PageOptions): UserPage
+
+    hotelInner(hotelId: ID, language: String): myHotel
+
+    #Separate API to view users who have added the hotels as favourite
+    usersWhoAddedHotelToFavorites(hotelId: ID, language: String, pageOptions: PageOptions): UserPage
+    #Separate API to view users who have added the hotels as wishlist
+    usersWhoAddedHotelToWishlists(hotelId: ID, language: String, pageOptions: PageOptions): UserPage
+    #Separate API to view users who have added the same Quality on hotel
+    usersWhoAddedQuality(hotelId: ID, qualityId: ID, language: String, pageOptions: PageOptions): UserPage
+
+    similarHotel(hotelId: ID, language: String, pageOptions: PageOptions): HotelPage
+
+    #AutoComplete Google Maps Places API for hotel type
+    autoCompleteMy(filters: QueryFilter): AutocompleteResponse
+    #Details Google Maps Places API
+    detailMyHotel(placeId: String, sessionToken : String, language: String): myHotel
+    detailRegion(placeId: String, sessionToken: String, language: String): Region
+    #Search Google Maps Places API
+    mySearchHotel(filters: QueryFilter, pageOptions: PageOptions): HotelPage
+    #AutoComplete Google Maps Places API for region type
+    regionAutocomplete(filters: QueryFilter): AutocompleteResponse
+    #Search User
+    searchUser(filters: QueryFilter, pageOptions: PageOptions): UserPage
+
+    #Explore hotel
+    suggestions(location: LocationFilter): Suggestion
+    newSuggestionsAvailable: Boolean
+    topTrending(location: LocationFilter, pageOptions: PageOptions): HotelPage
+    trendingFromFriends(location: LocationFilter, pageOptions: PageOptions): HotelPage
+    #Suggest User
+    suggestUser(language: String, pageOptions: PageOptions): UserPage
+
+    #News Feeds
+    friendsHighlight(language: String, pageOptions: PageOptions): NewsFeedsPage
+    popularUserHighlight(language: String, pageOptions: PageOptions): NewsFeedsPage
+
+    #User's Favorite hotels
+    favoriteHotels(filter: UserHotelFilter, pageOptions: PageOptions): UserHotelPage
+    #List of countries(locations) for Favorite hotel
+    locationsOfFavoritesHotel(userId:ID, language: String, pageOptions: PageOptions): PlaceHotelPage
+    #User's WishList hotels
+    wishListHotels(filter: UserHotelFilter, pageOptions: PageOptions): UserHotelPage
+    #List of countries(locations) for Wishlist hotel
+    locationsOfWishlistHotel(userId:ID, language: String, pageOptions: PageOptions): PlaceHotelPage
+
+    #Popular Users
+    popularUser(language: String, keyword: String, pageOptions: PageOptions): UserPage
+
+    #My Users with type of Phone
+    myUserFromContacts(phones: [String], language: String, keyword: String, pageOptions: PageOptions): UserPage
+    #My Users with type of Facebook
+    myUserFromFacebook(facebookId: [String], language: String, keyword: String, pageOptions: PageOptions): UserPage
+
+    #LoyaltyProgram
+    loyaltyPoints(language: String, pageOptions: PageOptions): LoyaltyPointsPage
+    pointsHistory(language: String, pageOptions: PageOptions): PointsHistoryPage
+
+
+    #Activity
+    newNotification(language: String): NotificationPage
+    notification(language: String, pageOptions: PageOptions): NotificationPage
+    promotion(language: String, pageOptions: PageOptions): PromotionPage
+
+    #Generate QR Code
+    generateQRCode(userId: ID, giftId: ID): String
+
+    #Status
+    status: SpendingStatus
+
+    #Quality
+    qualities:[Quality]
+    qualityTypes:[QualityType]
+
+    # WEB API
+    myCountries(language: String, pageOptions: PageOptions): CountryPage
+    myCities(countryId:ID, language: String, pageOptions: PageOptions): CityPage
+    globalCities(language: String, pageOptions: PageOptions): GlobalCityPage
+    localities(countryId: ID, cityId:ID, language: String, pageOptions: PageOptions): LocalityHotelPage
+    topHotels(localityId: ID, language: String, pageOptions: PageOptions): HotelPage
+    trendingHotels(countryId: ID, cityId: ID, language: String, pageOptions: PageOptions): HotelPage
+    featuredChefs(countryId:ID, language: String, pageOptions: PageOptions): ChefPage
+    featuredCountries(language: String, pageOptions: PageOptions): CountryPage
+    popularSearches(countryId: ID): [String]
+    neighborhood(cityId: ID, language: String, pageOptions: PageOptions): LocalityPage
+    locality(localityId: ID, language: String): Locality
+    city(localityId: ID, language: String): City
+    country(cityId: ID, language: String): Country
+    countryByLocality(localityId: ID, language: String): Country
+    internationalization(language: String, refresh: Boolean): Internationalization
+    webUserProfile(username: String): User
+    webFavoriteHotels(filter: UserHotelFilter, pageOptions: PageOptions): UserHotelPage
+    webLocationsOfFavoritesHotel(userId:ID, language: String, pageOptions: PageOptions): PlaceHotelPage
+    webWishListHotels(filter: UserHotelFilter, pageOptions: PageOptions): UserHotelPage
+    webLocationsOfWishlistHotel(userId:ID, language: String, pageOptions: PageOptions): PlaceHotelPage
+    webHotelDetail(hotelId: ID, language: String): myHotel
+    webSimilarHotel(hotelId: ID, language: String, pageOptions: PageOptions): HotelPage
+    availableLanguages(countryId: ID): [Language]
+    translateCountry(name: String, language: String): Country
+    citySitemaps(language: String, countryCode: String, pageOptions: PageOptions): CitySitemapPage
+    localitySitemaps(language: String, countryCode: String, pageOptions: PageOptions): LocalitySitemapPage
+    hotelSitemaps(language: String, countryCode: String, pageOptions: PageOptions): HotelSitemapPage
+    userSitemaps(language: String, countryCode: String, pageOptions: PageOptions): UserSitemapPage
+
+    #Owner
+    gifts(hotelId: ID, language: String, pageOptions: PageOptions): GiftPage
+    promotions(hotelId: ID, language: String, pageOptions: PageOptions): PromotionPage
+    targetAudiences: [TargetAudience]
+    clients(hotelId: ID, keyword: String, language: String, pageOptions: PageOptions): UserPage
+
+    #Admin
+    hotelsAdmin(input: AdminHotelFilter, pageOptions: PageOptions): HotelPage
+    hotelAdmin(id: ID, language: String): myHotel
+    hotelVerificationAppointmentsAdmin(language: String, pageOptions: PageOptions): HotelVerificationAppointmentPage
+    qualitiesAdmin(pageOptions: PageOptions):QualityPage
+    qualityAdmin(id: ID): Quality
+    qualityTypesAdmin(pageOptions: PageOptions):QualityTypePage
+    qualityTypeAdmin(id: ID): QualityType
+    countriesAdmin(language: String, pageOptions: PageOptions): CountryPage
+    countryAdmin(id: ID, language: String): Country
+    countryAdminByLocality(localityId: ID, language: String): Country
+    citiesAdmin(countryId: ID, language: String, pageOptions: PageOptions): CityPage
+    cityAdmin(id: ID, language: String): City
+    localitiesAdmin(cityId: ID, language: String, pageOptions: PageOptions): LocalityPage
+    localityAdmin(id: ID, language: String): Locality
+    usersAdmin(input: AdminUserFilter, pageOptions: PageOptions): UserPage
+    userProfileAdmin(id: ID, language: String): UserProfileAdmin
+    searchUserByNicknameAdmin(nickName: String, language: String): User
+    giftsAdmin(language: String, pageOptions: PageOptions): GiftPage
+    giftAdmin(id: ID, language: String): Gift
+    hotelPriceLevelsAdmin: [HotelPriceLevel]
+    hotelLanguagesAdmin(hotelId: ID): [String]
+    countryLanguagesAdmin(countryId: ID): [String]
+    cityLanguagesAdmin(cityId: ID): [String]
+    localityLanguagesAdmin(localityId: ID): [String]
+    countryAddressConfig(countryId: ID): [CountryAddressConfig]
+    cityAddressConfig(cityId: ID): [CityAddressConfig]
+    countryAddressConfigDetails(id: ID): CountryAddressConfig
+    cityAddressConfigDetails(id: ID): CityAddressConfig
+}
+
+type Mutation {
+
+    # Sign Up
+    requestEmailVerificationCode(email: String): Boolean
+    verifyEmailVerificationCode(email: String, code: Int, deviceID: String): HashMap
+    requestPhoneVerificationCode(phone: String): Boolean
+    verifyPhoneVerificationCode(phone: String, code: Int, deviceID: String): HashMap
+    updateProfile(input: UpdateProfile): UserProfile
+    updatePassword(password: String): Boolean
+    updateEmail(email: String): Boolean
+    updatePhone(phone: String): Boolean
+    changePassword(currentPassword:String, newPassword: String): Boolean
+    updateLocation(location: Location, timezoneId: String): Boolean
+    deleteProfile: Boolean
+    updateAccount(private: Boolean): Boolean
+    updateNotificationSettings(input: UpdateNotificationSetting): NotificationSetting
+    requestEmailResetPassword(email: String): Boolean
+    requestPhoneResetPassword(phone: String): Boolean
+    requestChefVerification: Boolean
+    setDeviceToken(token: String): Boolean
+    deleteDeviceToken(token: String): Boolean
+    readNotification(notificationId: ID): Notification
+
+    # hotels
+    addToFavorite(input: FavoriteHotel): Boolean
+    addHotelsToFavorite(input: [FavoriteHotel]): Boolean
+    addToWishlist(input: WishListHotel): Boolean
+    addPriceRange(input: PriceRange): Boolean
+
+    # Follows
+    followRequest(userId: ID!): FollowStatus
+    unfollowRequest(userId: ID!): FollowStatus
+    cancelFollowRequest(userId: ID!): FollowStatus
+    acceptRequest(userId: ID!): FollowStatus
+    rejectRequest(userId: ID!): FollowStatus
+    blockRequest(userId: ID): Boolean
+    unBlockRequest(userId: ID): Boolean
+
+    # Admin
+    addUserAdmin(input: UserInput): User
+    updateUserAdmin(input: UpdateUser): User
+    deleteUserAdmin(id: ID): Boolean
+    blockUserAdmin(userId: ID, block: Boolean): Boolean
+    addHotelAdmin(input: HotelInput): myHotel
+    updateHotelAdmin(input: UpdateHotel): myHotel
+    deleteHotelAdmin(hotelId: ID): Boolean
+    addQualityAdmin(input: QualityInput): Quality
+    addQualityTypeAdmin(name: String): QualityType
+    updateQualityAdmin(input: UpdateQuality): Quality
+    updateQualityTypeAdmin(input: UpdateQualityType): QualityType
+    deleteQualityAdmin(id: ID): Boolean
+    deleteQualityTypeAdmin(id: ID): Boolean
+    addLocalityAdmin(input: LocalityInput): Locality
+    updateLocalityAdmin(input: UpdateLocality): Locality
+    deleteLocalityAdmin(localityId: ID): Boolean
+    addCityAdmin(input: CityInput): City
+    updateCityAdmin(input: UpdateCity): City
+    deleteCityAdmin(cityId: ID): Boolean
+    addCountryAdmin(input: CountryInput): Country
+    updateCountryAdmin(input: UpdateCountry): Country
+    deleteCountryAdmin(countryId: ID): Boolean
+    addCountryAddressConfig(input: CountryAddressConfigInput): CountryAddressConfig
+    updateCountryAddressConfig(input: UpdateCountryAddressConfig): CountryAddressConfig
+    deleteCountryAddressConfig(id: ID): Boolean
+    addCityAddressConfig(input: CityAddressConfigInput): CityAddressConfig
+    updateCityAddressConfig(input: UpdateCityAddressConfig): CityAddressConfig
+    deleteCityAddressConfig(id: ID): Boolean
+    updateHotelAddress(countryId: ID, cityId: ID): Boolean
+    addGiftAdmin(input: GiftInput): Gift
+    updateGiftAdmin(input: UpdateGift): Gift
+    deleteGiftAdmin(id: ID): Boolean
+    updatePriceRangeConfigAdmin(input: HotelPriceConfigInput): HotelPriceConfig
+    clearCache(cacheName: String): Boolean
+
+    # Owner
+    addHotel(input: HotelInput): myHotel
+    updateHotel(input: UpdateHotel): myHotel
+    hotelVerificationAppointment(input: HotelVerificationAppointmentInput): HotelVerificationAppointment
+    addGift(input: GiftInput): Gift
+    updateGift(input: UpdateGift): Gift
+    deleteGift(id: ID): Boolean
+    addPromotion(input: PromotionInput): Promotion
+    updatePromotion(input: UpdatePromotion): Promotion
+    deletePromotion(id: ID): Boolean
+    addLoyaltyPoints(input: LoyaltyInput): LoyaltyPoints
+
+}
